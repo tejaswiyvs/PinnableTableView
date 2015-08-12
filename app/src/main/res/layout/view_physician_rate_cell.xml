@@ -29,6 +29,7 @@
         android:layout_gravity="center_vertical"
         android:text="$"
         android:textColor="@color/secondaryTextColor"
+        android:textSize="12dp"
         android:textStyle="bold"
         />
 </LinearLayout>

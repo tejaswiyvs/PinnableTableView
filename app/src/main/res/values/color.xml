@@ -4,8 +4,10 @@
     <color name="tableMain">#FFFFFF</color>
     <color name="tableRows">#FFFFFF</color>
     <color name="green">#01B37D</color>
-    <color name="primaryTextColor">#461D1F</color>
-    <color name="secondaryTextColor">#C7BBB6</color>
+    <color name="primaryTextColor">#292929</color>
+    <color name="secondaryTextColor">#BBBBBB</color>
+    <color name="alternatePrimaryTextColor">#777777</color>
+    <color name="alternateSecondaryTextColor">#BBBBBB</color>
     <color name="darkGreen">#11AA11</color>
     <color name="gray">#454545</color>
     <color name="unavailable">#000000</color>

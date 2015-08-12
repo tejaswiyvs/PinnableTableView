@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -30,6 +31,7 @@ import tejaswi_yerukalapudi.com.pinnabletableview.Model.TimeSlotStatus;
 public class MainActivity extends Activity implements HorizontalScrollViewListener {
 
     static final float FONT_SIZE = 12;
+    static final float FROZEN_HEADER_FONT_SIZE = 14;
 
     // Width of the status cell
     static final float CONTENT_CELL_WIDTH = 69.0f;
@@ -100,12 +102,12 @@ public class MainActivity extends Activity implements HorizontalScrollViewListen
             mPhysicians.add(p);
         }
 
-        ArrayList<String> header = this.getTimeSlotHeader();
+        ArrayList<Date> header = this.getTimeSlotHeader();
 
         PopulateMainTable(header, mPhysicians);
     }
 
-    protected void PopulateMainTable(ArrayList<String> header, ArrayList<Doctor> content) {
+    protected void PopulateMainTable(ArrayList<Date> header, ArrayList<Doctor> content) {
         mPhysicianInfoTable.setBackgroundResource(R.color.lightGray);
         mContentTable.setBackgroundResource(R.color.lightGray);
 
@@ -142,19 +144,37 @@ public class MainActivity extends Activity implements HorizontalScrollViewListen
     /*
      *   Sets up row-0 of the table with text headers.
      */
-    private void setupTableHeader(ArrayList<String> header) {
+    private void setupTableHeader(ArrayList<Date> header) {
         TableRow frozenTableHeaderRow = getTableRow();
         View frozenCell = getPhysicianCell("Specialist", "$");
 
         // Update the font color to light gray.
         TextView nameTxt = (TextView) frozenCell.findViewById(R.id.physicianRateCellName);
+        TextView rateTxt = (TextView) frozenCell.findViewById(R.id.physicianRateCellRate);
         nameTxt.setTextColor(getResources().getColor(R.color.secondaryTextColor));
+        nameTxt.setTextSize(FROZEN_HEADER_FONT_SIZE);
+        nameTxt.setTypeface(nameTxt.getTypeface(), Typeface.NORMAL);
+        rateTxt.setTextSize(FROZEN_HEADER_FONT_SIZE);
+        rateTxt.setTypeface(rateTxt.getTypeface(), Typeface.NORMAL);
 
         frozenTableHeaderRow.addView(frozenCell);
 
         TableRow contentTableHeaderRow = getTableRow();
         for (int j = 0; j < header.size(); j++) {
-            TextView rowCell = getTextView(header.get(j));
+            TextView rowCell = getTextView();
+
+            // xx:30
+            if (j % 2 != 0) {
+                rowCell.setTextSize(11);
+                rowCell.setTextColor(getResources().getColor(R.color.alternateSecondaryTextColor));
+                rowCell.setText(longDateFormat(header.get(j)));
+            }
+            // xx:00
+            else {
+                rowCell.setTextSize(14);
+                rowCell.setTextColor(getResources().getColor(R.color.alternatePrimaryTextColor));
+                rowCell.setText(simpleDateFormat(header.get(j)));
+            }
             contentTableHeaderRow.addView(rowCell);
         }
 
@@ -206,39 +226,42 @@ public class MainActivity extends Activity implements HorizontalScrollViewListen
         return frozenRow;
     }
 
-    private TextView getTextView(String text) {
-//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-//                                                                         LinearLayout.LayoutParams.WRAP_CONTENT);
-//        params.weight = 1.0f;
-//        params.gravity = Gravity.CENTER_VERTICAL;
-
-        TextView frozenCell = new TextView(this);
-        frozenCell.setText(text);
-        frozenCell.setTextColor(getResources().getColor(R.color.primaryTextColor));
-        frozenCell.setTextSize(TypedValue.COMPLEX_UNIT_DIP, FONT_SIZE);
-        frozenCell.setPadding(5, 0, 5, 0);
-        frozenCell.setMinimumWidth(getContentCellWidth());
-        frozenCell.setMinimumHeight(getCellHeight());
-//        frozenCell.setLayoutParams(params);
-        return frozenCell;
+    private TextView getTextView() {
+        TextView cell = new TextView(this);
+        cell.setTextColor(getResources().getColor(R.color.primaryTextColor));
+        cell.setTextSize(TypedValue.COMPLEX_UNIT_DIP, FONT_SIZE);
+        cell.setPadding(5, 0, 5, 0);
+        cell.setMinimumWidth(getContentCellWidth());
+        cell.setMinimumHeight(getCellHeight());
+        cell.setGravity(Gravity.CENTER);
+        return cell;
     }
 
-    private ArrayList<String> getTimeSlotHeader() {
+    private ArrayList<Date> getTimeSlotHeader() {
         final Date start = getBeginningOfDay();
         final Date end = getEndOfDay();
 
         Calendar cal = new GregorianCalendar();
         cal.setTime(start);
         Date tmp = start;
-        ArrayList<String> result = new ArrayList<String>();
-        DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+        ArrayList<Date> result = new ArrayList<>();
         while (tmp.getTime() < end.getTime()) {
-            result.add(dateFormat.format(tmp));
+            result.add(tmp);
             cal.add(Calendar.MINUTE, 30);
             tmp = cal.getTime();
         }
 
         return result;
+    }
+
+    private String simpleDateFormat(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("h a");
+        return dateFormat.format(date);
+    }
+
+    private String longDateFormat(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("H:mm");
+        return dateFormat.format(date);
     }
 
     private Date getBeginningOfDay() {
