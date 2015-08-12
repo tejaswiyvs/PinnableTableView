@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="lightGrey">#EEEEEE</color>
+    <color name="lightGray">#EEEEEE</color>
     <color name="tableMain">#FFFFFF</color>
     <color name="tableRows">#FFFFFF</color>
-    <color name="green">#33CC33</color>
+    <color name="green">#01B37D</color>
+    <color name="primaryTextColor">#461D1F</color>
+    <color name="secondaryTextColor">#C7BBB6</color>
     <color name="darkGreen">#11AA11</color>
     <color name="gray">#454545</color>
     <color name="unavailable">#000000</color>

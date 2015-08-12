@@ -7,5 +7,6 @@ import java.util.ArrayList;
  */
 public class Doctor {
     public String physicianName;
+    public String rate;
     public ArrayList<DoctorAvailability> slots;
 }
