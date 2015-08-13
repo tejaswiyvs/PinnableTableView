@@ -13,48 +13,75 @@
         android:text="234 appointments for the next 7 days (May 29 - Jun 6)"
         />
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/calendarRootLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <HorizontalScrollView
-            android:id="@+id/calendarMonthScrollView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/appointmentCountTxt">
-            <LinearLayout
-                android:id="@+id/calendarMonthLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="10"
-                android:gravity="center">
-
-            </LinearLayout>
-        </HorizontalScrollView>
-    </LinearLayout>
-    <HorizontalScrollView
-        android:id="@+id/calendarScrollView"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/calendarMonthScrollView"
-        android:padding="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
-            <LinearLayout
-                android:id="@+id/calendarLayout"
+        android:layout_gravity="center"
+        android:layout_below="@id/appointmentCountTxt"
+        android:padding="60dp"
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/leftArrow"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/arrow_left"
+            android:layout_centerVertical="true"
+            android:onClick="calendarLeftButtonClicked"
+            />
+        <LinearLayout
+            android:id="@+id/calendarHolderLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/leftArrow"
+            android:layout_toLeftOf="@+id/rightArrow"
+            android:orientation="vertical">
+            <HorizontalScrollView
+                android:id="@+id/calendarMonthScrollView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/calendarMonthLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                </LinearLayout>
+            </HorizontalScrollView>
+            <HorizontalScrollView
+                android:id="@+id/calendarDaysScrollView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="10"
-                android:gravity="center">
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+                <LinearLayout
+                    android:id="@+id/calendarLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
 
-            </LinearLayout>
-    </HorizontalScrollView>
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+        <ImageButton
+            android:id="@id/rightArrow"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/arrow_right"
+            android:onClick="calendarRightButtonClicked"
+            />
+    </RelativeLayout>
 
     <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/calendarScrollView"
+        android:layout_below="@id/calendarRootLayout"
         android:layout_marginBottom="2dip"
         android:layout_weight="1"
         android:orientation="vertical"

@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -31,6 +32,7 @@ public class MainActivity extends Activity implements HorizontalScrollViewListen
 
     static final float FONT_SIZE = 12;
     static final float FROZEN_HEADER_FONT_SIZE = 14;
+    static final int SCROLL_DISTANCE = 30;
 
     // Width of the status cell
     static final float CONTENT_CELL_WIDTH = 69.0f;
@@ -51,6 +53,7 @@ public class MainActivity extends Activity implements HorizontalScrollViewListen
 
     private ObservableHorizontalScrollView mHeaderScrollView;
     private ObservableHorizontalScrollView mContentScrollView;
+    private HorizontalScrollView mCalendarDaysScrollView;
 
     private ArrayList<Doctor> mPhysicians;
 
@@ -70,11 +73,29 @@ public class MainActivity extends Activity implements HorizontalScrollViewListen
         mContentScrollView.setScrollViewListener(this);
         mContentScrollView.setHorizontalScrollBarEnabled(false); // Only show the scroll bar on the header table (so that there aren't two)
 
+        mCalendarDaysScrollView = (HorizontalScrollView)findViewById(R.id.calendarDaysScrollView);
+
         PopulateTempData();
         ArrayList<Date> header = this.getTimeSlotHeader();
 
         this.setupCalendar();
         this.PopulateMainTable(header, mPhysicians);
+    }
+    // Event Handlers
+    public void onScrollChanged(ObservableHorizontalScrollView scrollView, int x, int y, int oldX, int oldY) {
+        if (scrollView== mHeaderScrollView) {
+            mContentScrollView.scrollTo(x, y);
+        } else if (scrollView== mContentScrollView) {
+            mHeaderScrollView.scrollTo(x, y);
+        }
+    }
+
+    public void calendarRightButtonClicked(View v) {
+        mCalendarDaysScrollView.scrollBy(SCROLL_DISTANCE, 0);
+    }
+
+    public void calendarLeftButtonClicked(View v) {
+        mCalendarDaysScrollView.scrollBy(-1 * SCROLL_DISTANCE, 0);
     }
 
     // Helpers
@@ -332,13 +353,5 @@ public class MainActivity extends Activity implements HorizontalScrollViewListen
 
     private int getCellHeight() {
         return Helper.getHeightForDP(this, CELL_HEIGHT);
-    }
-
-    public void onScrollChanged(ObservableHorizontalScrollView scrollView, int x, int y, int oldX, int oldY) {
-        if (scrollView== mHeaderScrollView) {
-            mContentScrollView.scrollTo(x, y);
-        } else if (scrollView== mContentScrollView) {
-            mHeaderScrollView.scrollTo(x, y);
-        }
     }
 }
