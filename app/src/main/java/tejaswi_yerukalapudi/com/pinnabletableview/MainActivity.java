@@ -1,15 +1,14 @@
 package tejaswi_yerukalapudi.com.pinnabletableview;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -72,6 +71,10 @@ public class MainActivity extends Activity implements HorizontalScrollViewListen
         mContentScrollView.setHorizontalScrollBarEnabled(false); // Only show the scroll bar on the header table (so that there aren't two)
 
         PopulateTempData();
+        ArrayList<Date> header = this.getTimeSlotHeader();
+
+        this.setupCalendar();
+        this.PopulateMainTable(header, mPhysicians);
     }
 
     // Helpers
@@ -101,10 +104,28 @@ public class MainActivity extends Activity implements HorizontalScrollViewListen
             }
             mPhysicians.add(p);
         }
+    }
 
-        ArrayList<Date> header = this.getTimeSlotHeader();
+    protected void setupMonthCalendar() {
 
-        PopulateMainTable(header, mPhysicians);
+    }
+
+    protected void setupCalendar() {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        LinearLayout scrollViewLayout = (LinearLayout) this.findViewById(R.id.calendarLayout);
+
+        Date startDate = getBeginningOfDay();
+        Date endDate = add2Months(startDate);
+
+        while (startDate.getTime() < endDate.getTime()) {
+            View view = inflater.inflate(R.layout.view_calendar_date, null);
+            TextView dateTxt = (TextView) view.findViewById(R.id.dateTxt);
+            TextView dayTxt = (TextView) view.findViewById(R.id.dayTxt);
+            dateTxt.setText(getDayOfMonth(startDate));
+            dayTxt.setText(getDayOfWeek(startDate));
+            startDate = addDay(startDate);
+            scrollViewLayout.addView(view);
+        }
     }
 
     protected void PopulateMainTable(ArrayList<Date> header, ArrayList<Doctor> content) {
@@ -132,13 +153,6 @@ public class MainActivity extends Activity implements HorizontalScrollViewListen
             mPhysicianInfoTable.addView(frozenRow);
             mContentTable.addView(row);
         }
-
-        // Update content heights?
-//        for (int i = 0; i < mContentTable.getChildCount(); i++) {
-//            TableRow frozenRow = (TableRow) mPhysicianInfoTable.getChildAt(i);
-//            frozenRow.setMinimumHeight(getCellHeight());
-//            setChildTextViewWidths(frozenRow, getContentCellWidth());
-//        }
     }
 
     /*
@@ -264,6 +278,23 @@ public class MainActivity extends Activity implements HorizontalScrollViewListen
         return dateFormat.format(date);
     }
 
+    private String getDayOfMonth(Date date) {
+        DateFormat format = new SimpleDateFormat("d");
+        return format.format(date);
+    }
+
+    private String getDayOfWeek(Date date) {
+        DateFormat format = new SimpleDateFormat("EEE");
+        return format.format(date);
+    }
+
+    private Date addDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE, 1);
+        return calendar.getTime();
+    }
+
     private Date getBeginningOfDay() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -279,6 +310,15 @@ public class MainActivity extends Activity implements HorizontalScrollViewListen
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DATE);
         calendar.set(year, month, day, 23, 59, 59);
+        return calendar.getTime();
+    }
+
+    private Date add2Months(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DATE);
+        calendar.add(Calendar.MONTH, 2);
         return calendar.getTime();
     }
 

@@ -10,5 +10,6 @@
     <color name="alternateSecondaryTextColor">#BBBBBB</color>
     <color name="darkGreen">#11AA11</color>
     <color name="gray">#454545</color>
+    <color name="white">#FFFFFF</color>
     <color name="unavailable">#000000</color>
 </resources>
